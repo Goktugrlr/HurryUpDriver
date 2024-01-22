@@ -52,8 +52,8 @@ public class Movement : MonoBehaviour
         moveInput = Input.GetAxis("Vertical");
         steerInput = Input.GetAxis("Horizontal");
 
-        Debug.Log("Move Input: " + moveInput);
-        Debug.Log("Steer Input: " + steerInput);
+        //Debug.Log("Move Input: " + moveInput);
+        //Debug.Log("Steer Input: " + steerInput);
     }
 
     private void FixedUpdate()
