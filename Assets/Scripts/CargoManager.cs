@@ -2,26 +2,18 @@ using UnityEngine;
 
 public class CargoManager : MonoBehaviour
 {
-    public Transform[] spawnPoints;
-    public GameObject cubePrefab;
+    public Transform[] cargoSpawnPoints;
+    public GameObject cargoPrefab;
 
     private GameObject[] lastLoadedBoxes;
     private bool removalCooldown = false;
+    private int remainingBoxes;
 
     void Start()
     {
-        lastLoadedBoxes = new GameObject[spawnPoints.Length];
-        SpawnInitialCubes();
-    }
-
-    void SpawnInitialCubes()
-    {
-        for (int i = 0; i < spawnPoints.Length; i++)
-        {
-            GameObject newBox = Instantiate(cubePrefab, spawnPoints[i].position, Quaternion.identity);
-            newBox.transform.parent = spawnPoints[i];
-            lastLoadedBoxes[i] = newBox;
-        }
+        lastLoadedBoxes = new GameObject[cargoSpawnPoints.Length];
+        remainingBoxes = cargoSpawnPoints.Length;
+        LoadTruck();
     }
 
     void OnTriggerEnter(Collider other)
@@ -30,30 +22,48 @@ public class CargoManager : MonoBehaviour
         {
             removalCooldown = true;
 
-            // Destroy the collided object
             Destroy(other.gameObject);
 
-            // Remove the last loaded box for each spawn point in reverse order
-            for (int i = spawnPoints.Length - 1; i >= 0; i--)
+            for (int i = cargoSpawnPoints.Length - 1; i >= 0; i--)
             {
-                if (lastLoadedBoxes[i] != null)
-                {
-                    Destroy(lastLoadedBoxes[i]);
-                    lastLoadedBoxes[i] = null;
-                    break;  // Stop after removing the first non-null box
-                }
+
+                Destroy(lastLoadedBoxes[i]);
+                lastLoadedBoxes[i] = null;
+
+                remainingBoxes--;
+
+                    if (remainingBoxes == 0)
+                    {
+                        LoadTruck();
+                    }
+                    break;          
             }
-
-            Debug.Log("Hit");
-
-            // Start cooldown coroutine
             StartCoroutine(RemovalCooldown());
+
+            Invoke(nameof(SpawnTargetRandomly), 1f); 
         }
     }
 
     System.Collections.IEnumerator RemovalCooldown()
     {
-        yield return new WaitForSeconds(1f);  // Adjust the cooldown duration as needed
+        yield return new WaitForSeconds(1f);  
         removalCooldown = false;
+    }
+
+    void SpawnTargetRandomly()
+    {
+        FindObjectOfType<GameManager>().SpawnTargetRandomly();
+    }
+
+    void LoadTruck()
+    {
+        for (int i = 0; i < cargoSpawnPoints.Length; i++)
+        {
+            GameObject newBox = Instantiate(cargoPrefab, cargoSpawnPoints[i].position, Quaternion.identity);
+            newBox.transform.parent = cargoSpawnPoints[i];
+            lastLoadedBoxes[i] = newBox;
+        }
+
+        remainingBoxes = cargoSpawnPoints.Length;
     }
 }
