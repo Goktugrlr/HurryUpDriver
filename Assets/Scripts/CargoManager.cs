@@ -8,12 +8,13 @@ public class CargoManager : MonoBehaviour
     private GameObject[] lastLoadedBoxes;
     private bool removalCooldown = false;
     private int remainingBoxes;
-
+    private GameManager gameManager;
     void Start()
     {
         lastLoadedBoxes = new GameObject[cargoSpawnPoints.Length];
         remainingBoxes = cargoSpawnPoints.Length;
         LoadTruck();
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     void OnTriggerEnter(Collider other)
@@ -40,7 +41,9 @@ public class CargoManager : MonoBehaviour
             }
             StartCoroutine(RemovalCooldown());
 
-            Invoke(nameof(SpawnTargetRandomly), 1f); 
+            Invoke(nameof(SpawnTargetRandomly), 1f);
+
+            gameManager.countdownTimer += 10;
         }
     }
 
@@ -52,7 +55,7 @@ public class CargoManager : MonoBehaviour
 
     void SpawnTargetRandomly()
     {
-        FindObjectOfType<GameManager>().SpawnTargetRandomly();
+        gameManager.SpawnTargetRandomly();
     }
 
     void LoadTruck()
