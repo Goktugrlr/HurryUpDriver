@@ -29,19 +29,23 @@ public class CargoManager : MonoBehaviour
             {
 
                 Destroy(lastLoadedBoxes[i]);
-                lastLoadedBoxes[i] = null;
+
+                if (lastLoadedBoxes[i] == null)
+                {
+                    continue;
+                }
 
                 remainingBoxes--;
 
-                    if (remainingBoxes == 0)
-                    {
-                        LoadTruck();
-                    }
-                    break;          
+                if (remainingBoxes == 0)
+                {
+                    LoadTruck();
+                }
+                break;
             }
+            SpawnTargetRandomly();
+            
             StartCoroutine(RemovalCooldown());
-
-            Invoke(nameof(SpawnTargetRandomly), 1f);
 
             gameManager.countdownTimer += 10;
         }
@@ -49,7 +53,7 @@ public class CargoManager : MonoBehaviour
 
     System.Collections.IEnumerator RemovalCooldown()
     {
-        yield return new WaitForSeconds(1f);  
+        yield return new WaitForSeconds(1f);
         removalCooldown = false;
     }
 
