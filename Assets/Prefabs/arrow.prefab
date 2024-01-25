@@ -110,7 +110,7 @@ GameObject:
   - component: {fileID: 6976519118785562374}
   - component: {fileID: 2636530880045449626}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
