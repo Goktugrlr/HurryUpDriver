@@ -1,13 +1,16 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
-public class Movement : MonoBehaviour
+public class CarController : MonoBehaviour
 {
     public enum Axel
     {
         front,
         rear
     }
+
+    private float fuelCapacity = 10f;
+    public GameManager gameManager;
 
     [Serializable]
     public struct Wheel
@@ -37,23 +40,35 @@ public class Movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass;
+        gameManager.SetMaxCapacity(fuelCapacity);
     }
 
 
     private void Update()
     {
-        GetInput();    
+        GetInput();
         AnimateWheels();
         ApplyEffects();
+
+        if (CheckFuel())
+        {
+        fuelCapacity -= 1f * Time.deltaTime;
+        gameManager.SetCapacity(fuelCapacity);
+        }
     }
 
     void GetInput()
     {
-        moveInput = Input.GetAxis("Vertical");
-        steerInput = Input.GetAxis("Horizontal");
-
-        //Debug.Log("Move Input: " + moveInput);
-        //Debug.Log("Steer Input: " + steerInput);
+        if (CheckFuel())
+        {
+            moveInput = Input.GetAxis("Vertical");
+            steerInput = Input.GetAxis("Horizontal");
+        }
+        else
+        {
+            moveInput = 0f;
+            steerInput = Input.GetAxis("Horizontal");
+        }
     }
 
     private void FixedUpdate()
@@ -123,6 +138,29 @@ public class Movement : MonoBehaviour
             {
                 wheel.wheelEffect.GetComponentInChildren<TrailRenderer>().emitting = false;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Fuel"))
+        {
+            Destroy(other.gameObject);
+
+            fuelCapacity += 20;
+        }
+    }
+
+    public bool CheckFuel()
+    {
+        if (fuelCapacity <= 0)
+        {
+            fuelCapacity = 0;
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 }
