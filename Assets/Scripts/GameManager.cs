@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
     public Text timer;
     public Text gameOverText;
     public Slider fuelSlider;
+    public Slider nitrousSlider;
+
     public float countdownTimer = 40.0f;
 
     private CarController controller;
@@ -48,14 +50,25 @@ public class GameManager : MonoBehaviour
         controller.enabled = false;
     }
 
-    public void SetMaxCapacity(float capacity)
+    public void SetMaxFuelCapacity(float capacity)
     {
         fuelSlider.maxValue = capacity;
         fuelSlider.value = capacity;
     }
 
-    public void SetCapacity(float capacity)
+    public void SetFuelCapacity(float capacity)
     {
         fuelSlider.value = capacity;
+    }
+    
+    public void SetMaxNitrousCapacity(float capacity)
+    {
+        nitrousSlider.maxValue = capacity;
+        nitrousSlider.value = capacity;
+    }
+
+    public void SetNitrousCapacity(float capacity)
+    {
+        nitrousSlider.value = capacity;
     }
 }

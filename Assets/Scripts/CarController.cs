@@ -9,7 +9,9 @@ public class CarController : MonoBehaviour
         rear
     }
 
-    private float fuelCapacity = 10f;
+    private float fuelCapacity = 100f;
+    private float nitrousCapacity = 30f;
+
     public GameManager gameManager;
 
     [Serializable]
@@ -22,14 +24,16 @@ public class CarController : MonoBehaviour
         public Axel axel;
     }
 
-    public float maxAcceleration = 30f;
+    public float maxAcceleration = 10000f;
+    private float accWithNitrous = 20000f;
     public float brakeAcceleration = 50f;
 
     public float turnSensitivity = 0.75f;
     public float maxSteerAngle = 25f;
 
     public List<Wheel> wheels;
-
+    public ParticleSystem NitrousEffect1;
+    public ParticleSystem NitrousEffect2;
     float moveInput;
     float steerInput;
 
@@ -40,7 +44,8 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass;
-        gameManager.SetMaxCapacity(fuelCapacity);
+        gameManager.SetMaxFuelCapacity(fuelCapacity);
+        gameManager.SetMaxNitrousCapacity(nitrousCapacity);
     }
 
 
@@ -53,8 +58,10 @@ public class CarController : MonoBehaviour
         if (CheckFuel())
         {
         fuelCapacity -= 1f * Time.deltaTime;
-        gameManager.SetCapacity(fuelCapacity);
+        gameManager.SetFuelCapacity(fuelCapacity);
         }
+
+        HandleNitrous();
     }
 
     void GetInput()
@@ -156,6 +163,37 @@ public class CarController : MonoBehaviour
         if (fuelCapacity <= 0)
         {
             fuelCapacity = 0;
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void HandleNitrous()
+    {      
+        if (Input.GetKey(KeyCode.LeftShift) && CheckNitrous())
+        {
+            maxAcceleration = accWithNitrous;
+            nitrousCapacity -= 3f * Time.deltaTime;
+            gameManager.SetNitrousCapacity(nitrousCapacity);
+            NitrousEffect1.Play();
+            NitrousEffect2.Play();
+        }
+        else
+        {
+            maxAcceleration = 10000f;
+            NitrousEffect1.Stop();
+            NitrousEffect2.Stop();
+        }
+    }
+
+    private bool CheckNitrous()
+    {
+        if (nitrousCapacity <= 0)
+        {
+            nitrousCapacity = 0;
             return false;
         }
         else
