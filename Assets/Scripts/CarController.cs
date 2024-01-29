@@ -152,9 +152,30 @@ public class CarController : MonoBehaviour
     {
         if (other.CompareTag("Fuel"))
         {
-            Destroy(other.gameObject);
+            Vector3 destroyedFuelCanPosition = other.transform.parent.position;
 
-            fuelCapacity += 20;
+            Destroy(other.transform.parent.gameObject);
+
+            if (100 - fuelCapacity < 20)
+            {
+                fuelCapacity = 100;
+            } 
+            else
+            {
+                fuelCapacity += 20;
+            }
+            
+
+            FindObjectOfType<Pickable>().RespawnFuel(destroyedFuelCanPosition);  
+        }
+        
+        if (other.CompareTag("Nitro"))
+        {
+            Destroy(other.transform.parent.gameObject);
+
+            nitrousCapacity = 30;
+
+            FindObjectOfType<Pickable>().SpawnNitro();
         }
     }
 
@@ -177,7 +198,6 @@ public class CarController : MonoBehaviour
         {
             maxAcceleration = accWithNitrous;
             nitrousCapacity -= 3f * Time.deltaTime;
-            gameManager.SetNitrousCapacity(nitrousCapacity);
             NitrousEffect1.Play();
             NitrousEffect2.Play();
         }
@@ -187,6 +207,7 @@ public class CarController : MonoBehaviour
             NitrousEffect1.Stop();
             NitrousEffect2.Stop();
         }
+        gameManager.SetNitrousCapacity(nitrousCapacity);
     }
 
     private bool CheckNitrous()
@@ -201,4 +222,5 @@ public class CarController : MonoBehaviour
             return true;
         }
     }
+
 }
