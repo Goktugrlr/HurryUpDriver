@@ -11,7 +11,7 @@ public class CarController : MonoBehaviour
 
     private float fuelCapacity = 100f;
     private float nitrousCapacity = 30f;
-
+    private CarLights carLights;
     public GameManager gameManager;
 
     [Serializable]
@@ -46,6 +46,7 @@ public class CarController : MonoBehaviour
         rb.centerOfMass = centerOfMass;
         gameManager.SetMaxFuelCapacity(fuelCapacity);
         gameManager.SetMaxNitrousCapacity(nitrousCapacity);
+        carLights = GetComponent<CarLights>();
     }
 
 
@@ -91,6 +92,10 @@ public class CarController : MonoBehaviour
         {
             wheel.wheelCollider.motorTorque = moveInput * maxAcceleration * Time.deltaTime;
         }
+
+        carLights.isBackLightOn = (moveInput < 0);
+
+        carLights.OperateBackLights();
     }
 
     void Steer()
