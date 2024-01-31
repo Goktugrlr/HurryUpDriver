@@ -12,7 +12,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        streetLamps = GameObject.FindGameObjectsWithTag("lamp");
+        streetLamps = GameObject.FindGameObjectsWithTag("Lamp");
     }
     void Update()
     {
@@ -45,12 +45,15 @@ public class DayNightCycle : MonoBehaviour
 
     void UpdateLamps()
     {
-        bool isNighttime = currentTimeOfDay >= 0.5f && currentTimeOfDay <= 0.75f;
+        float nightStart = 0.5f;
+        float nightEnd = 0.9f;
+
+        bool isNighttime = currentTimeOfDay >= nightStart && currentTimeOfDay <= nightEnd;
 
         foreach (GameObject lamps in streetLamps)
         {
-            Light lamp = lamps.GetComponent<Light>();
-            lamp.intensity = isNighttime ? 1f : 0f;
+            Light lamp = lamps.GetComponentInChildren<Light>();
+            lamp.intensity = isNighttime ? 9f : 0f;
         }
     }
 }

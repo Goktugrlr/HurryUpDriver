@@ -7,6 +7,7 @@ TagManager:
   - Target
   - Fuel
   - Nitro
+  - Lamp
   layers:
   - Default
   - TransparentFX
