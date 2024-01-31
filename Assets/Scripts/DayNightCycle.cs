@@ -8,11 +8,18 @@ public class DayNightCycle : MonoBehaviour
     public Light directionalLight; 
     public Gradient dayNightColorGradient; 
 
+    private GameObject[] streetLamps;
+
+    private void Start()
+    {
+        streetLamps = GameObject.FindGameObjectsWithTag("lamp");
+    }
     void Update()
     {
         UpdateTimeOfDay();
         UpdateSunRotation();
         UpdateLightColor();
+        UpdateLamps();
     }
 
     void UpdateTimeOfDay()
@@ -34,5 +41,16 @@ public class DayNightCycle : MonoBehaviour
     void UpdateLightColor()
     {
         directionalLight.color = dayNightColorGradient.Evaluate(currentTimeOfDay);
+    }
+
+    void UpdateLamps()
+    {
+        bool isNighttime = currentTimeOfDay >= 0.5f && currentTimeOfDay <= 0.75f;
+
+        foreach (GameObject lamps in streetLamps)
+        {
+            Light lamp = lamps.GetComponent<Light>();
+            lamp.intensity = isNighttime ? 1f : 0f;
+        }
     }
 }

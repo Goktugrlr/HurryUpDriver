@@ -14,7 +14,8 @@ public class GameManager : MonoBehaviour
     public GameObject helpPanel;
 
     public float countdownTimer = 40.0f;
-
+    public Camera frontView;
+    private bool isFrontView = false;
     public bool hasPaused;
 
     private CarController controller;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         SpawnTargetRandomly();
         controller = FindObjectOfType<CarController>();
+        frontView.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -44,6 +46,8 @@ public class GameManager : MonoBehaviour
         {
             PauseMenu();
         }
+
+        ChangeCamera();
     }
     public void SpawnTargetRandomly()
     {
@@ -98,4 +102,22 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1f;
         }       
     }  
+
+    private void ChangeCamera()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (!isFrontView)
+            {
+                frontView.gameObject.SetActive(true);
+                isFrontView = true;
+            }
+            else
+            {
+                frontView.gameObject.SetActive(false);
+                isFrontView=false;
+            }
+        }
+
+    }
 }
