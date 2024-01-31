@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CargoManager : MonoBehaviour
 {
     public Transform[] cargoSpawnPoints;
     public GameObject cargoPrefab;
+    public Text deliveredCargoCounter;
+    public float deliveredCargoCount = 0;
 
     private GameObject[] lastLoadedBoxes;
     private bool removalCooldown = false;
@@ -17,13 +20,18 @@ public class CargoManager : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
+    private void Update()
+    {
+        deliveredCargoCounter.text = deliveredCargoCount.ToString();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Target") && !removalCooldown)
         {
             removalCooldown = true;
-
             Destroy(other.gameObject);
+            deliveredCargoCount += 1;
 
             for (int i = cargoSpawnPoints.Length - 1; i >= 0; i--)
             {
