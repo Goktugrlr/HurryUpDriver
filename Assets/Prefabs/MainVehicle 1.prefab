@@ -30436,6 +30436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minSpeed: 0.5
   maxSpeed: 40
+  nitroAudio: {fileID: 0}
   minPitch: 0.2
   maxPitch: 0
 --- !u!114 &381511343128391534
@@ -30493,7 +30494,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 47d4ef7cadd50ce4eaa92ddfdc9117ea, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 810d8ca988d710f4e8e7290fe7335365, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

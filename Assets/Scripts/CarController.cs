@@ -13,6 +13,7 @@ public class CarController : MonoBehaviour
     private float nitrousCapacity = 30f;
     private CarLights carLights;
     public GameManager gameManager;
+    private CarSounds carSounds;
 
     [Serializable]
     public struct Wheel
@@ -48,6 +49,7 @@ public class CarController : MonoBehaviour
         gameManager.SetMaxFuelCapacity(fuelCapacity);
         gameManager.SetMaxNitrousCapacity(nitrousCapacity);
         carLights = GetComponent<CarLights>();
+        carSounds = GetComponent<CarSounds>();
     }
 
 
@@ -207,12 +209,16 @@ public class CarController : MonoBehaviour
             nitrousCapacity -= 3f * Time.deltaTime;
             NitrousEffect1.gameObject.SetActive(true);
             NitrousEffect2.gameObject.SetActive(true);
+
+            carSounds.NitroSFX(true);
         }
         else
         {
             maxAcceleration = 10000f;
             NitrousEffect1.gameObject.SetActive(false);
             NitrousEffect2.gameObject.SetActive(false);
+
+            carSounds.NitroSFX(false);
         }
         gameManager.SetNitrousCapacity(nitrousCapacity);
     }

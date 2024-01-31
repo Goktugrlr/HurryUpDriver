@@ -17,7 +17,6 @@ public class GameManager : MonoBehaviour
     public Camera frontView;
     private bool isFrontView = false;
     public bool hasPaused;
-
     private CarController controller;
     void Start()
     {

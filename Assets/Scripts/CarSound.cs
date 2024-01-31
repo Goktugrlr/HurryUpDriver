@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CarSounds : MonoBehaviour
@@ -10,10 +8,16 @@ public class CarSounds : MonoBehaviour
 
     private Rigidbody carRb;
     private AudioSource carAudio;
+    public AudioSource nitroAudio;
+    public AudioSource handbrakeAudio;
+    public AudioSource truckHorn;
+    public AudioSource safetyAudio;
 
     public float minPitch;
     public float maxPitch;
     private float pitchFromCar;
+
+    public bool isNitroUsing = false;
 
     void Start()
     {
@@ -24,6 +28,9 @@ public class CarSounds : MonoBehaviour
     void Update()
     {
         EngineSound();
+        TruckHorn();
+        HandbrakeAudio();
+        SafetyAudio();
     }
 
     void EngineSound()
@@ -44,6 +51,69 @@ public class CarSounds : MonoBehaviour
         if (currentSpeed > maxSpeed)
         {
             carAudio.pitch = maxPitch;
+        }
+    }
+
+
+    public void NitroSFX(bool isUsingNitro)
+    {
+        if (isUsingNitro && !nitroAudio.isPlaying)
+        {
+            nitroAudio.Play();
+        }
+        else if (!isUsingNitro && nitroAudio.isPlaying)
+        {
+            nitroAudio.Stop();
+        }
+    }
+
+
+    void TruckHorn()
+    {
+        if (Input.GetKey(KeyCode.H))
+        {
+            if (!truckHorn.isPlaying)
+            {
+                truckHorn.Play();
+            }
+        }
+        else
+        {
+            if (truckHorn.isPlaying)
+            {
+                truckHorn.Stop();
+            }
+        }
+    }
+
+    void HandbrakeAudio()
+    {
+        if (Input.GetKey(KeyCode.Space) && gameObject.GetComponent<Rigidbody>().velocity.magnitude >= 10)
+        {
+            if (!handbrakeAudio.isPlaying)
+            {
+                handbrakeAudio.Play();
+            }
+        }
+        else
+        {
+            if (handbrakeAudio.isPlaying)
+            {
+                handbrakeAudio.Stop();
+            }
+        }
+    }
+
+    void SafetyAudio()
+    {
+        if (Input.GetAxis("Vertical") < -0.1f)
+        {
+            if(!safetyAudio.isPlaying)
+            safetyAudio.Play();
+        }
+        else
+        {
+            safetyAudio.Stop();
         }
     }
 }
