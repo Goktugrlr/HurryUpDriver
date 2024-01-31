@@ -7,9 +7,14 @@ public class CarLights : MonoBehaviour
     public GameObject[] backLights;
     public GameObject[] headLights;
 
+    private Color originalLightColor;
+    private Color originalParticleSystemColor;
+
     void Start()
     {
         isBackLightOn = false;
+        originalLightColor = Color.red;
+        originalParticleSystemColor = Color.red;
     }
 
     private void Update()
@@ -23,6 +28,22 @@ public class CarLights : MonoBehaviour
         {
             foreach (var light in backLights)
             {
+                Rigidbody vehicleRigidbody = gameObject.GetComponent<Rigidbody>();
+
+                if (Vector3.Dot(vehicleRigidbody.velocity.normalized, transform.forward) < -0.1f)
+                {
+                    light.GetComponentInChildren<Light>().color = Color.white;
+
+                    var mainModule = light.GetComponentInChildren<ParticleSystem>().main;
+                    mainModule.startColor = Color.white;
+                }
+                else
+                {
+                    light.GetComponentInChildren<Light>().color = originalLightColor;
+
+                    var mainModule = light.GetComponentInChildren<ParticleSystem>().main;
+                    mainModule.startColor = originalParticleSystemColor;
+                }
                 light.SetActive(true);
             }
         }

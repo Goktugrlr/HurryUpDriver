@@ -21,6 +21,7 @@ public class CarController : MonoBehaviour
         public WheelCollider wheelCollider;
         public GameObject wheelEffect;
         public ParticleSystem smokeEffect;
+        public ParticleSystem[] nitroEffects;
         public Axel axel;
     }
 
@@ -204,14 +205,14 @@ public class CarController : MonoBehaviour
         {
             maxAcceleration = accWithNitrous;
             nitrousCapacity -= 3f * Time.deltaTime;
-            NitrousEffect1.Play();
-            NitrousEffect2.Play();
+            NitrousEffect1.gameObject.SetActive(true);
+            NitrousEffect2.gameObject.SetActive(true);
         }
         else
         {
             maxAcceleration = 10000f;
-            NitrousEffect1.Stop();
-            NitrousEffect2.Stop();
+            NitrousEffect1.gameObject.SetActive(false);
+            NitrousEffect2.gameObject.SetActive(false);
         }
         gameManager.SetNitrousCapacity(nitrousCapacity);
     }
