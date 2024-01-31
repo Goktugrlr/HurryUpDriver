@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,8 +10,12 @@ public class GameManager : MonoBehaviour
     public Text gameOverText;
     public Slider fuelSlider;
     public Slider nitrousSlider;
+    public GameObject pausePanel;
+    public GameObject helpPanel;
 
     public float countdownTimer = 40.0f;
+
+    public bool hasPaused;
 
     private CarController controller;
     void Start()
@@ -34,7 +39,11 @@ public class GameManager : MonoBehaviour
         {
             GameOver();
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseMenu();
+        }
     }
     public void SpawnTargetRandomly()
     {
@@ -71,4 +80,22 @@ public class GameManager : MonoBehaviour
     {
         nitrousSlider.value = capacity;
     }
+
+    public void PauseMenu()
+    { 
+        if (!hasPaused)
+        {
+            pausePanel.SetActive(true);
+            FindObjectOfType<ButtonHandler>().ShowButtons();
+            hasPaused = true;
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            helpPanel.SetActive(false);
+            pausePanel.SetActive(false);
+            hasPaused = false;
+            Time.timeScale = 1f;
+        }       
+    }  
 }

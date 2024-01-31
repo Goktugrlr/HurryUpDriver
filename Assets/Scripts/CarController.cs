@@ -63,6 +63,7 @@ public class CarController : MonoBehaviour
         }
 
         HandleNitrous();
+        RespawnVehicle();
     }
 
     void GetInput()
@@ -228,4 +229,13 @@ public class CarController : MonoBehaviour
         }
     }
 
+    private void RespawnVehicle()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            GameObject vehicle = FindObjectOfType<CarController>().gameObject;
+            Vector3 respawnPositon = new Vector3(0, 10, 10);
+            vehicle.transform.position = respawnPositon;
+        }
+    }
 }
