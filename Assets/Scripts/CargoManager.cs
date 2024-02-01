@@ -6,7 +6,8 @@ public class CargoManager : MonoBehaviour
     public Transform[] cargoSpawnPoints;
     public GameObject cargoPrefab;
     public Text deliveredCargoCounter;
-    public float deliveredCargoCount = 0;
+    public int deliveredCargoCount = 0;
+    public AudioSource targetReached;
 
     private GameObject[] lastLoadedBoxes;
     private bool removalCooldown = false;
@@ -20,18 +21,19 @@ public class CargoManager : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
-    private void Update()
+    void Update()
     {
         deliveredCargoCounter.text = deliveredCargoCount.ToString();
     }
 
-    void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Target") && !removalCooldown)
         {
             removalCooldown = true;
             Destroy(other.gameObject);
             deliveredCargoCount += 1;
+            targetReached.Play();
 
             for (int i = cargoSpawnPoints.Length - 1; i >= 0; i--)
             {
@@ -65,16 +67,16 @@ public class CargoManager : MonoBehaviour
         removalCooldown = false;
     }
 
-    void SpawnTargetRandomly()
+    private void SpawnTargetRandomly()
     {
         gameManager.SpawnTargetRandomly();
     }
 
-    void LoadTruck()
+    private void LoadTruck()
     {
         for (int i = 0; i < cargoSpawnPoints.Length; i++)
         {
-            GameObject newBox = Instantiate(cargoPrefab, cargoSpawnPoints[i].position, Quaternion.identity);
+            GameObject newBox = Instantiate(cargoPrefab, cargoSpawnPoints[i].position, cargoSpawnPoints[i].rotation);
             newBox.transform.parent = cargoSpawnPoints[i];
             lastLoadedBoxes[i] = newBox;
         }

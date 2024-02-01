@@ -16,6 +16,5 @@ public class TargetIndicator : MonoBehaviour
         toRotation *= Quaternion.Euler(0f, -90f, 0f);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
-
     }
 }

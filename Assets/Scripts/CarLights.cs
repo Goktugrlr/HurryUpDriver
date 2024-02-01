@@ -17,7 +17,7 @@ public class CarLights : MonoBehaviour
         originalParticleSystemColor = Color.red;
     }
 
-    private void Update()
+    void Update()
     {
         TurnOnHeadLights();
     }

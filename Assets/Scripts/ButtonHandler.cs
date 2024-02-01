@@ -1,4 +1,3 @@
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
@@ -22,12 +21,19 @@ public class ButtonHandler : MonoBehaviour
     public void MainMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        Time.timeScale = 1f;
     }
 
     public void Help()
     {
         gameManager.helpPanel.gameObject.SetActive(true);
         HideButtons();
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        Time.timeScale = 1f;
     }
 
     public void OKButton()

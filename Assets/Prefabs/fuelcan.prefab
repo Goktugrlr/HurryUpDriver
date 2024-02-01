@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2250797632500044370}
   m_Layer: 0
-  m_Name: fuelcan
+  m_Name: Fuelcan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

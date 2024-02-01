@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.UI;
 public class CarController : MonoBehaviour
 {
     public enum Axel
@@ -9,11 +10,12 @@ public class CarController : MonoBehaviour
         rear
     }
 
-    private float fuelCapacity = 100f;
+    private float fuelCapacity = 180f;
     private float nitrousCapacity = 30f;
     private CarLights carLights;
     public GameManager gameManager;
     private CarSounds carSounds;
+    public Text fuelDepleted;
 
     [Serializable]
     public struct Wheel
@@ -28,21 +30,20 @@ public class CarController : MonoBehaviour
 
     public float maxAcceleration = 10000f;
     private float accWithNitrous = 20000f;
-    public float brakeAcceleration = 50f;
+    public float brakeAcceleration = 60f;
 
     public float turnSensitivity = 0.75f;
     public float maxSteerAngle = 25f;
-
+    public Vector3 centerOfMass;
     public List<Wheel> wheels;
     public ParticleSystem NitrousEffect1;
     public ParticleSystem NitrousEffect2;
-    float moveInput;
-    float steerInput;
 
+    private float moveInput;
+    private float steerInput;
     private Rigidbody rb;
 
-    public Vector3 centerOfMass;
-    private void Start()
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = centerOfMass;
@@ -52,8 +53,7 @@ public class CarController : MonoBehaviour
         carSounds = GetComponent<CarSounds>();
     }
 
-
-    private void Update()
+    void Update()
     {
         GetInput();
         AnimateWheels();
@@ -69,7 +69,7 @@ public class CarController : MonoBehaviour
         RespawnVehicle();
     }
 
-    void GetInput()
+    private void GetInput()
     {
         if (CheckFuel())
         {
@@ -83,14 +83,14 @@ public class CarController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    void FixedUpdate()
     {
         Move();    
         Steer();
         HandBrake();
     }
 
-    void Move()
+    private void Move()
     {
         foreach (var wheel in wheels)
         {
@@ -98,11 +98,10 @@ public class CarController : MonoBehaviour
         }
 
         carLights.isBackLightOn = (moveInput < 0);
-
         carLights.OperateBackLights();
     }
 
-    void Steer()
+    private void Steer()
     {
         foreach (var wheel in wheels)
         {
@@ -114,7 +113,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    void AnimateWheels()
+    private void AnimateWheels()
     {
         foreach(var wheel in wheels)
         {
@@ -126,7 +125,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    void HandBrake()
+    private void HandBrake()
     {
         foreach (var wheel in wheels)
         {
@@ -141,7 +140,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    void ApplyEffects()
+    private void ApplyEffects()
     {
         foreach (var wheel in wheels)
         {
@@ -165,16 +164,15 @@ public class CarController : MonoBehaviour
 
             Destroy(other.transform.parent.gameObject);
 
-            if (100 - fuelCapacity < 20)
+            if (180 - fuelCapacity < 20)
             {
-                fuelCapacity = 100;
+                fuelCapacity = 180;
             } 
             else
             {
                 fuelCapacity += 20;
             }
             
-
             FindObjectOfType<Pickable>().RespawnFuel(destroyedFuelCanPosition);  
         }
         
@@ -193,15 +191,17 @@ public class CarController : MonoBehaviour
         if (fuelCapacity <= 0)
         {
             fuelCapacity = 0;
+            fuelDepleted.gameObject.SetActive(true);
             return false;
         }
         else
         {
+            fuelDepleted.gameObject.SetActive(false);
             return true;
         }
     }
 
-    public void HandleNitrous()
+    private void HandleNitrous()
     {      
         if (Input.GetKey(KeyCode.LeftShift) && CheckNitrous())
         {
@@ -210,7 +210,7 @@ public class CarController : MonoBehaviour
             NitrousEffect1.gameObject.SetActive(true);
             NitrousEffect2.gameObject.SetActive(true);
 
-            carSounds.NitroSFX(true);
+            carSounds.NitroAudio(true);
         }
         else
         {
@@ -218,7 +218,7 @@ public class CarController : MonoBehaviour
             NitrousEffect1.gameObject.SetActive(false);
             NitrousEffect2.gameObject.SetActive(false);
 
-            carSounds.NitroSFX(false);
+            carSounds.NitroAudio(false);
         }
         gameManager.SetNitrousCapacity(nitrousCapacity);
     }
@@ -241,8 +241,12 @@ public class CarController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R))
         {
             GameObject vehicle = FindObjectOfType<CarController>().gameObject;
-            Vector3 respawnPositon = new Vector3(0, 10, 10);
+            vehicle.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            Vector3 respawnPositon = new Vector3(120, 5, 220);
             vehicle.transform.position = respawnPositon;
+
+            Quaternion respawnRotation = Quaternion.Euler(0f, 180f, 0f); 
+            vehicle.transform.rotation = respawnRotation;
         }
     }
 }

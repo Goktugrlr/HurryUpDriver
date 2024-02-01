@@ -5479,7 +5479,7 @@ Camera:
   field of view: 60
   orthographic: 0
   orthographic size: 5
-  m_Depth: 1
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -30378,10 +30378,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
+  fuelDepleted: {fileID: 0}
   maxAcceleration: 10000
   brakeAcceleration: 50
   turnSensitivity: 0.75
   maxSteerAngle: 40
+  centerOfMass: {x: 0, y: 0, z: 0}
   wheels:
   - wheelModel: {fileID: 6636359035375550135}
     wheelCollider: {fileID: 6647992886536118083}
@@ -30421,7 +30423,6 @@ MonoBehaviour:
     axel: 1
   NitrousEffect1: {fileID: 6130700749918624601}
   NitrousEffect2: {fileID: 7772485337112324101}
-  centerOfMass: {x: 0, y: 0, z: 0}
 --- !u!114 &1597700940870100066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30435,10 +30436,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minSpeed: 0.5
-  maxSpeed: 40
+  maxSpeed: 100
   nitroAudio: {fileID: 0}
+  handbrakeAudio: {fileID: 0}
+  truckHorn: {fileID: 0}
+  safetyAudio: {fileID: 0}
   minPitch: 0.2
   maxPitch: 0
+  isNitroUsing: 0
 --- !u!114 &381511343128391534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30465,6 +30470,7 @@ MonoBehaviour:
   cargoPrefab: {fileID: 7628968413561530535, guid: f3df2f7049764814a970727b85fd4b12, type: 3}
   deliveredCargoCounter: {fileID: 0}
   deliveredCargoCount: 0
+  targetReached: {fileID: 0}
 --- !u!114 &5641807353591004758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30494,7 +30500,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 810d8ca988d710f4e8e7290fe7335365, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 47d4ef7cadd50ce4eaa92ddfdc9117ea, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -41680,22 +41686,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: arrow (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 2313291352345908204, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 2313291352345908204, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3028822966082547117, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.49999988
-      objectReference: {fileID: 0}
-    - target: {fileID: 3028822966082547117, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.49999988
-      objectReference: {fileID: 0}
     - target: {fileID: 3028822966082547117, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -41740,10 +41730,6 @@ PrefabInstance:
       propertyPath: vehicle
       value: 
       objectReference: {fileID: 6636359035375641233}
-    - target: {fileID: 5133319267967028565, guid: e508732b6d48010438e0c72b5e074f54, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

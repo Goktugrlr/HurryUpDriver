@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Pickable : MonoBehaviour
@@ -11,13 +10,13 @@ public class Pickable : MonoBehaviour
     private float respawnDelay = 10f;
     private Vector3 fuelRespawnPosition;
 
-    private void Start()
+    void Start()
     {
         SpawnInitialFuel();
         SpawnNitro();
     }
 
-    public void SpawnInitialFuel()
+    private void SpawnInitialFuel()
     {
         foreach (Transform spawnPoint in fuelSpawnPoints)
             Instantiate(fuelCan, spawnPoint.position, Quaternion.identity);

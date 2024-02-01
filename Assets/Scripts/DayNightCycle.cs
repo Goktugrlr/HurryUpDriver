@@ -10,7 +10,7 @@ public class DayNightCycle : MonoBehaviour
 
     private GameObject[] streetLamps;
 
-    private void Start()
+    void Start()
     {
         streetLamps = GameObject.FindGameObjectsWithTag("Lamp");
     }
@@ -22,7 +22,7 @@ public class DayNightCycle : MonoBehaviour
         UpdateLamps();
     }
 
-    void UpdateTimeOfDay()
+    private void UpdateTimeOfDay()
     {
         currentTimeOfDay += Time.deltaTime / dayDuration;
 
@@ -32,18 +32,18 @@ public class DayNightCycle : MonoBehaviour
         }
     }
 
-    void UpdateSunRotation()
+    private void UpdateSunRotation()
     {
         float angle = currentTimeOfDay * 360f; 
         directionalLight.transform.rotation = Quaternion.Euler(new Vector3(angle, 0, 0));
     }
 
-    void UpdateLightColor()
+    private void UpdateLightColor()
     {
         directionalLight.color = dayNightColorGradient.Evaluate(currentTimeOfDay);
     }
 
-    void UpdateLamps()
+    private void UpdateLamps()
     {
         float nightStart = 0.5f;
         float nightEnd = 0.9f;

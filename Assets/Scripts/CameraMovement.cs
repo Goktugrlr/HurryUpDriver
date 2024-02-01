@@ -15,26 +15,23 @@ public class CameraMovement : MonoBehaviour
         FollowTarget();
     }
 
-    void FollowTarget()
+    private void FollowTarget()
     {
         HandleMovement();
         HandleRotation();
     }
 
-    void HandleMovement()
+    private void HandleMovement()
     {
-        Vector3 targetPos = new Vector3();
-        targetPos = carTarget.TransformPoint(moveOffset);
+        Vector3 targetPos = carTarget.TransformPoint(moveOffset);
 
         transform.position = Vector3.Lerp(transform.position, targetPos, moveSmoothness * Time.deltaTime);
     }
 
-    void HandleRotation()
+    private void HandleRotation()
     {
-        var direction = carTarget.position - transform.position;
-        var rotation = new Quaternion();
-
-        rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
+        Vector3 direction = carTarget.position - transform.position;
+        Quaternion rotation = Quaternion.LookRotation(direction + rotOffset, Vector3.up);
 
         transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSmoothness * Time.deltaTime);
     }

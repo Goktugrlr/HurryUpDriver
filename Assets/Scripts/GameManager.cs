@@ -1,23 +1,27 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public Transform[] targetPoints; 
     public GameObject targetPrefab;
+
     public Text timer;
     public Text gameOverText;
     public Slider fuelSlider;
     public Slider nitrousSlider;
+    public GameObject gameOverPanel;
     public GameObject pausePanel;
     public GameObject helpPanel;
 
-    public float countdownTimer = 40.0f;
-    public Camera frontView;
-    private bool isFrontView = false;
+    public float countdownTimer = 120.0f;
     public bool hasPaused;
+    public Camera frontView;
+    public AudioListener audioListener;
+
+    private bool isFrontView = false;
     private CarController controller;
+
     void Start()
     {
         SpawnTargetRandomly();
@@ -25,7 +29,7 @@ public class GameManager : MonoBehaviour
         frontView.gameObject.SetActive(false);
     }
 
-    private void Update()
+    void Update()
     {
         if (countdownTimer > 0)
         {
@@ -57,7 +61,8 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         countdownTimer = 0;
-        gameOverText.gameObject.SetActive(true);
+        gameOverText.text = "You Lost\nTotal Delivered Cargo: " + FindObjectOfType<CargoManager>().deliveredCargoCount.ToString();
+        gameOverPanel.SetActive(true);
         controller.GetComponent<Rigidbody>().velocity = Vector3.zero;
         controller.enabled = false;
     }
@@ -88,13 +93,16 @@ public class GameManager : MonoBehaviour
     { 
         if (!hasPaused)
         {
+            audioListener.enabled = false;
             pausePanel.SetActive(true);
             FindObjectOfType<ButtonHandler>().ShowButtons();
             hasPaused = true;
             Time.timeScale = 0f;
+
         }
         else
         {
+            audioListener.enabled = true;
             helpPanel.SetActive(false);
             pausePanel.SetActive(false);
             hasPaused = false;
@@ -117,6 +125,5 @@ public class GameManager : MonoBehaviour
                 isFrontView=false;
             }
         }
-
     }
 }

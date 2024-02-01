@@ -8,6 +8,7 @@ public class CarSounds : MonoBehaviour
 
     private Rigidbody carRb;
     private AudioSource carAudio;
+
     public AudioSource nitroAudio;
     public AudioSource handbrakeAudio;
     public AudioSource truckHorn;
@@ -33,7 +34,7 @@ public class CarSounds : MonoBehaviour
         SafetyAudio();
     }
 
-    void EngineSound()
+    private void EngineSound()
     {
         currentSpeed = carRb.velocity.magnitude;
         pitchFromCar = carRb.velocity.magnitude / 60f;
@@ -54,8 +55,7 @@ public class CarSounds : MonoBehaviour
         }
     }
 
-
-    public void NitroSFX(bool isUsingNitro)
+    public void NitroAudio(bool isUsingNitro)
     {
         if (isUsingNitro && !nitroAudio.isPlaying)
         {
@@ -67,8 +67,7 @@ public class CarSounds : MonoBehaviour
         }
     }
 
-
-    void TruckHorn()
+    private void TruckHorn()
     {
         if (Input.GetKey(KeyCode.H))
         {
@@ -86,7 +85,7 @@ public class CarSounds : MonoBehaviour
         }
     }
 
-    void HandbrakeAudio()
+    private void HandbrakeAudio()
     {
         if (Input.GetKey(KeyCode.Space) && gameObject.GetComponent<Rigidbody>().velocity.magnitude >= 10)
         {
@@ -104,9 +103,9 @@ public class CarSounds : MonoBehaviour
         }
     }
 
-    void SafetyAudio()
+    private void SafetyAudio()
     {
-        if (Input.GetAxis("Vertical") < -0.1f)
+        if (Input.GetAxis("Vertical") < -0.1f && Vector3.Dot(carRb.velocity.normalized, transform.forward) < -0.1f)
         {
             if(!safetyAudio.isPlaying)
             safetyAudio.Play();
