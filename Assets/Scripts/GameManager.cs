@@ -8,13 +8,14 @@ public class GameManager : MonoBehaviour
 
     public Text timer;
     public Text gameOverText;
+    public Text pauseInfoText;
     public Slider fuelSlider;
     public Slider nitrousSlider;
     public GameObject gameOverPanel;
     public GameObject pausePanel;
     public GameObject helpPanel;
 
-    public float countdownTimer = 120.0f;
+    public float countdownTimer = 150.0f;
     public bool hasPaused;
     public Camera frontView;
     public AudioListener audioListener;
@@ -51,6 +52,8 @@ public class GameManager : MonoBehaviour
         }
 
         ChangeCamera();
+
+        HidePauseInfo();
     }
     public void SpawnTargetRandomly()
     {
@@ -124,6 +127,14 @@ public class GameManager : MonoBehaviour
                 frontView.gameObject.SetActive(false);
                 isFrontView=false;
             }
+        }
+    }
+
+    private void HidePauseInfo()
+    {
+        if (Time.time > 10)
+        {
+            pauseInfoText.gameObject.SetActive(false);
         }
     }
 }

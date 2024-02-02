@@ -164,13 +164,13 @@ public class CarController : MonoBehaviour
 
             Destroy(other.transform.parent.gameObject);
 
-            if (180 - fuelCapacity < 20)
+            if (180 - fuelCapacity < 30)
             {
                 fuelCapacity = 180;
             } 
             else
             {
-                fuelCapacity += 20;
+                fuelCapacity += 30;
             }
             
             FindObjectOfType<Pickable>().RespawnFuel(destroyedFuelCanPosition);  
